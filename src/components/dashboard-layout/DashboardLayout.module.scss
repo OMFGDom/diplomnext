@@ -1,0 +1,12 @@
+.DashboardLayout {
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.main {
+  padding: 20px 10px;
+  background: #F8F8F8;
+  height: 100%;
+}

@@ -11,7 +11,7 @@ export function Button({
   return (
     <button
       className={cn(
-        'linear rounded-lg bg-transparent border border-primary py-3 px-7 text-base font-medium text-white transition hover:bg-primary active:bg-brand-700',
+        'linear rounded-lg border border-primary py-3 px-7 text-base font-medium text-white transition hover:bg-primary active:bg-brand-700',
         className
       )}
       {...rest}

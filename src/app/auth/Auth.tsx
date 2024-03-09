@@ -79,7 +79,7 @@ export function Auth() {
         />
 
         <div className='flex flex-col items-center justify-center'>
-          <Button className="w-full bg-[#1f2150] mb-[10px] text-white rounded-lg" onClick={() => setIsLoginForm(true)}>Login</Button>
+          <Button className="w-full bg-[#1F2150] mb-[10px] text-white rounded-lg" onClick={() => setIsLoginForm(true)}>Login</Button>
           <span>
             Forgot my password?
           </span>

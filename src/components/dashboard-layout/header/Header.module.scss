@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-bottom: 50px;
+  .header__logo {
+    margin-right: 20px;
+    padding: 18px 30px 18px 40px;
+    border-right: 1px solid #9D9D9D;
+  }
+  .header__main {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 25px;
+    .header__btn {
+      display: flex;
+      height: 25px;
+      width: 25px;
+      cursor: pointer;
+    }
+  }
+}

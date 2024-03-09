@@ -6,16 +6,19 @@ export interface IAuthForm {
 export interface IUser {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  isActive: boolean;
-  isSuperuser: boolean;
-  facultet: string;
+  first_name: string;
+  last_name: string;
+  profile_image: string;
+  created_at: string;
+  last_login_at: string;
+  is_active: boolean;
+  is_superuser: boolean;
+  faculty_id: string;
 }
 
 export interface IAuthResponse {
-  user: IUser;
   access_token: string;
+  refresh_token: string;
 }
 
 export type TypeUserForm = Omit<IUser, 'id'> & { password?: string }

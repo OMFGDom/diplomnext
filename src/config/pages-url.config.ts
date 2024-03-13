@@ -1,7 +1,12 @@
 class DASHBOARD {
-  private root = '/dashboard';
+	private root = '/dashboard'
 
-  HOME = `${this.root}`;
+	HOME = `${this.root}`
+	REGISTRATION = `${this.root}/registration`
+	CURRICULA = `${this.root}/curricula`
+	HISTORY = `${this.root}/history`
+	ADDCOURSE = `${this.root}/addcourse`
+	PROFILE = `${this.root}/profile`
 }
 
-export const DASHBOARD_PAGES = new DASHBOARD();
+export const DASHBOARD_PAGES = new DASHBOARD()

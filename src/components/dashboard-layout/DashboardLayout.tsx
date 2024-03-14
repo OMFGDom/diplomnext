@@ -10,21 +10,29 @@ import { Sidebar } from './sidebar/Sidebar'
 export default function DashboardLayout({
 	children
 }: PropsWithChildren<unknown>) {
-	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true)
+	// Устанавливаем начальное состояние в null, чтобы отличать неинициализированное состояние
+	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean | null>(null)
 
 	useEffect(() => {
-		// Получаем состояние из localStorage или устанавливаем значение по умолчанию (true)
 		const savedState = localStorage.getItem('isSidebarOpen')
-		setIsSidebarOpen(savedState === null ? true : JSON.parse(savedState))
+		// Устанавливаем состояние в зависимости от сохраненного значения или true по умолчанию
+		setIsSidebarOpen(savedState !== null ? JSON.parse(savedState) : true)
 	}, [])
 
 	useEffect(() => {
-		// Сохраняем состояние в localStorage при каждом изменении isSidebarOpen
-		localStorage.setItem('isSidebarOpen', JSON.stringify(isSidebarOpen))
+		if (isSidebarOpen !== null) {
+			// Сохраняем состояние в localStorage при каждом изменении isSidebarOpen, кроме начального null
+			localStorage.setItem('isSidebarOpen', JSON.stringify(isSidebarOpen))
+		}
 	}, [isSidebarOpen])
 
 	const toggleSidebar = () => {
-		setIsSidebarOpen(!isSidebarOpen)
+		setIsSidebarOpen(prevState => !prevState)
+	}
+
+	// Отображаем компонент только после инициализации состояния
+	if (isSidebarOpen === null) {
+		return null
 	}
 
 	return (

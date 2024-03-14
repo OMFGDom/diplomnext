@@ -6,7 +6,7 @@ import Loader from '@/components/ui/Loader'
 
 import { useProgram } from '@/hooks/useProgram'
 
-export function Curricula() {
+export function Program() {
 	const { data, isLoading } = useProgram()
 
 	return isLoading ? (
@@ -34,7 +34,7 @@ export function Curricula() {
 								<td className='border border-gray-300 p-2'>{program.code}</td>
 								<td className='border border-gray-300 p-2'>
 									<Link
-										href={`/program/${program.id}`}
+										href={`/dashboard/program/${program.id}`}
 										passHref
 									>
 										{program.title}
@@ -45,7 +45,7 @@ export function Curricula() {
 					</tbody>
 				</table>
 			) : (
-				<div>Curricula not loaded!</div>
+				<div>Program not loaded!</div>
 			)}
 		</div>
 	)

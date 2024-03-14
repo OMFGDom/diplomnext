@@ -32,6 +32,7 @@ export function Sidebar({ isOpen }: SidebarProps) {
 						alt='sidebar'
 						width={245}
 						height={70}
+						priority={true}
 					/>
 				</Link>
 				<div className='grid grid-cols-1 gap-[80px]'>

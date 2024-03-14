@@ -4,7 +4,7 @@ import { Heading } from '@/components/ui/Heading'
 
 import { NO_INDEX_PAGE } from '@/constants/seo.constants'
 
-import { Program } from './Program'
+import { Curriculum } from './Curriculum'
 
 export const metadata: Metadata = {
 	title: 'Dashboard',
@@ -16,7 +16,7 @@ export default function DashboardPage() {
 		<>
 			<Heading title='Curricula' />
 			<div className='flex w-3/5 h-auto p-[24px] bg-[#fff] rounded-[10px]'>
-				<Program />
+				<Curriculum />
 			</div>
 		</>
 	)

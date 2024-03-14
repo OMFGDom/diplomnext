@@ -40,6 +40,6 @@ export const MENU_PROFILE: IMenuItem[] = [
 	{
 		icon: UserRound,
 		link: DASHBOARD_PAGES.REGISTRATION,
-		name: 'Curricula Registration'
+		name: 'Profile'
 	}
 ]

@@ -13,24 +13,6 @@ import SemesterCoursesTable from './SemesterCoursesTable'
 
 // Curriculum.tsx
 
-// Curriculum.tsx
-
-// Curriculum.tsx
-
-// Curriculum.tsx
-
-// Curriculum.tsx
-
-// Curriculum.tsx
-
-// Curriculum.tsx
-
-// Curriculum.tsx
-
-// Curriculum.tsx
-
-// Curriculum.tsx
-
 export function Curriculum() {
 	const params = useParams()
 	const id = params.id as string

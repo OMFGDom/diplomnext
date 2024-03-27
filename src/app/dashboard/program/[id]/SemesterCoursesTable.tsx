@@ -36,7 +36,7 @@ const SemesterCoursesTable: React.FC<ISemesterCoursesTableProps> = ({
 							<td className='border border-gray-300 p-2'>
 								{course.order_in_semester}
 							</td>
-							<td className='border border-gray-300 p-2'>
+							<td className='border border-gray-300 p-2 whitespace-nowrap'>
 								{course.course.course_code}
 							</td>
 							<td className='border border-gray-300 p-2'>

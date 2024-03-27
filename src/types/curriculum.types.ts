@@ -29,3 +29,36 @@ export interface ICurriculum {
 	program_title: string
 	semester_count: number
 }
+
+export interface ICurriculumCreate {
+	title: string
+	program_id: string
+}
+
+interface ICurriculumUser {
+	id: string
+	first_name: string
+	last_name: string
+}
+
+interface ICurriculumItem {
+	title: string
+	year: string
+	program_id: string
+	id: string
+	is_main: boolean
+	created_by: string
+	user: ICurriculumUser
+	program_title: string
+	degree_name: string
+}
+
+interface ICurriculumProgram {
+	degree_name: string
+	program_title: string
+}
+
+export interface ICurriculumDraft {
+	curriculums: ICurriculumItem[]
+	program: ICurriculumProgram
+}

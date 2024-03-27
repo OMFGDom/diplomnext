@@ -5,7 +5,7 @@ import { programService } from '@/services/program.service'
 export function useProgram() {
 	const { data, isLoading, isSuccess } = useQuery({
 		queryKey: ['program'],
-		queryFn: () => programService.getPrograms()
+		queryFn: () => programService.getMainPrograms()
 	})
 
 	return { data, isLoading, isSuccess }

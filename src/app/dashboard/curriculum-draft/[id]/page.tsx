@@ -4,19 +4,19 @@ import { Heading } from '@/components/ui/Heading'
 
 import { NO_INDEX_PAGE } from '@/constants/seo.constants'
 
-import { Curriculum } from './Curriculum'
+import { CurriculumDraft } from './CurriculumDraft'
 
 export const metadata: Metadata = {
-	title: 'Curricula',
+	title: 'Curriculum Registration',
 	...NO_INDEX_PAGE
 }
 
 export default function DashboardPage() {
 	return (
 		<>
-			<Heading title='Curricula' />
-			<div className='flex w-4/6 h-auto p-[24px] bg-[#fff] rounded-[10px]'>
-				<Curriculum />
+			<Heading title='Curriculum Registration' />
+			<div className='flex flex-col w-full h-auto p-[24px] bg-[#fff] rounded-[10px]'>
+				<CurriculumDraft />
 			</div>
 		</>
 	)

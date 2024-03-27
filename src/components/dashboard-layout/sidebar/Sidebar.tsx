@@ -24,7 +24,7 @@ export function Sidebar({ isOpen }: SidebarProps) {
 		>
 			<div>
 				<Link
-					href='/'
+					href='/dashboard'
 					className='flex items-center justify-center mb-[25px]'
 				>
 					<Image

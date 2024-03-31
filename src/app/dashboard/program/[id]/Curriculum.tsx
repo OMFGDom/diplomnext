@@ -1,22 +1,17 @@
-// Curriculum.tsx
 'use client'
 
 import { useParams } from 'next/navigation'
 
 import Loader from '@/components/ui/Loader'
 
-import { useCurriculum } from '@/hooks/useCurriculum'
+import { useCurriculumMain } from '@/hooks/useCurriculumMain'
 
 import SemesterCoursesTable from './SemesterCoursesTable'
-
-// Curriculum.tsx
-
-// Curriculum.tsx
 
 export function Curriculum() {
 	const params = useParams()
 	const id = params.id as string
-	const { data, isLoading } = useCurriculum(id)
+	const { data, isLoading } = useCurriculumMain(id)
 
 	return isLoading ? (
 		<div className='flex w-full h-max justify-center'>

@@ -3,6 +3,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PropsWithChildren, useState } from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 export function Providers({ children }: PropsWithChildren) {
 	const [client] = useState(
@@ -17,8 +19,10 @@ export function Providers({ children }: PropsWithChildren) {
 
 	return (
 		<QueryClientProvider client={client}>
-			{children}
-			<ReactQueryDevtools initialIsOpen={false} />
+			<DndProvider backend={HTML5Backend}>
+				{children}
+				<ReactQueryDevtools initialIsOpen={false} />
+			</DndProvider>
 		</QueryClientProvider>
 	)
 }

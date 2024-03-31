@@ -1,7 +1,9 @@
 import {
 	ICurriculum,
+	ICurriculumById,
 	ICurriculumCreate,
-	ICurriculumDraft
+	ICurriculumDraft,
+	UpdateCurriculum
 } from '@/types/curriculum.types'
 
 import { axiosWithAuth } from '@/api/interceptors'
@@ -24,6 +26,19 @@ class CurriculumService {
 	async createCurriculum(data: ICurriculumCreate) {
 		const response = await axiosWithAuth.post<ICurriculumCreate>(
 			`${this.BASE_URL}/create_curriculum`,
+			data
+		)
+		return response.data
+	}
+	async getCurriculumByID(id: string) {
+		const response = await axiosWithAuth.get<ICurriculumById>(
+			`${this.BASE_URL}/get_curriculum_by_id?curriculum_id=${id}`
+		)
+		return response.data
+	}
+	async updateCurriculum(data: UpdateCurriculum, id: string) {
+		const response = await axiosWithAuth.put<ICurriculumCreate>(
+			`${this.BASE_URL}/update_curriculum?curriculum_id=${id}`,
 			data
 		)
 		return response.data

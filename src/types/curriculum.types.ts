@@ -62,3 +62,59 @@ export interface ICurriculumDraft {
 	curriculums: ICurriculumItem[]
 	program: ICurriculumProgram
 }
+
+interface ICurriculumByIdCourse {
+	id: string
+	title: string
+	teor: string
+	cr: string
+	term: string
+	course_code: string
+	pr: string
+	ects: string
+	user_id: string
+}
+
+interface ICurriculumByIdCourses {
+	semester: number
+	course_id: string
+	curriculum_id: string
+	order_in_semester: number
+	course: ICurriculumByIdCourse
+}
+
+export interface ICurriculumById {
+	title: string
+	year: string
+	program_id: string
+	id: string
+	is_main: boolean
+	created_by: string
+	courses: ICurriculumByIdCourses[]
+	user: User
+	program_title: string
+	semester_count: number
+	degree_name: string
+}
+
+interface User {
+	id: string
+	profile_image: string
+	last_login_at: string
+	is_superuser: boolean
+	first_name: string
+	last_name: string
+	email: string
+	created_at: string
+	is_active: boolean
+	faculty_id: string
+}
+
+type UpdateCurriculumItem = {
+	course_id: string
+	semester: number
+	curriculum_id: string
+	order_in_semester: number
+}
+
+export type UpdateCurriculum = UpdateCurriculumItem[]

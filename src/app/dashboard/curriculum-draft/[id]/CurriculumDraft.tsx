@@ -41,7 +41,7 @@ export function CurriculumDraft() {
 					{data.curriculums.map(item => (
 						<Link
 							key={item.id}
-							href={`/dashboard/program/${item.id}`}
+							href={`/dashboard/curriculum/${item.id}`}
 							passHref
 						>
 							<div className='p-[12px] border-solid border-[#1F2150] border-[1px] rounded-[16px] h-full transition-all duration-300 hover:bg-[#f0f2f5] hover:scale-105'>

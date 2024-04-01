@@ -1,5 +1,6 @@
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 import Loader from '@/components/ui/Loader'
 import { Button } from '@/components/ui/buttons/Button'
@@ -8,6 +9,16 @@ import { useCurriculumById } from '@/hooks/useCurriculumById'
 import { useCurriculumUpdate } from '@/hooks/useCurriculumUpdate'
 
 import SemesterCoursesTable from './SemesterCoursesTable'
+
+export interface Course {
+	id: string
+	course_code: string
+	title: string
+	teor: string
+	pr: string
+	cr: string
+	ects: string
+}
 
 interface ICurriculumProps {
 	onEditToggle: () => void
@@ -26,28 +37,71 @@ export function Curriculum({ onEditToggle }: ICurriculumProps) {
 	const { data, isLoading } = useCurriculumById(id)
 	const { mutate: updateCurriculum } = useCurriculumUpdate()
 	const [updatedCourses, setUpdatedCourses] = useState<IUpdatedCourse[]>([])
+	const [localData, setLocalData] = useState(data)
 	const [isEditing, setIsEditing] = useState(false)
 
-	const onDrop = (courseId: string, semester: number) => {
-		setUpdatedCourses(prevCourses => [
-			...prevCourses,
-			{
-				course_id: courseId,
+	useEffect(() => {
+		if (data) {
+			setLocalData(data)
+			const initialUpdatedCourses = data.courses.map(course => ({
+				course_id: course.course_id,
+				semester: course.semester,
+				curriculum_id: course.curriculum_id,
+				order_in_semester: course.order_in_semester
+			}))
+			setUpdatedCourses(initialUpdatedCourses)
+		}
+	}, [data])
+
+	const onDrop = (droppedCourse: Course, semester: number) => {
+		setLocalData(prevData => {
+			if (!prevData) return prevData
+
+			const courseExists = prevData.courses.some(
+				curriculumCourse => curriculumCourse.course.id === droppedCourse.id
+			)
+
+			if (courseExists) {
+				toast.error('The course is already in the curriculum')
+				return prevData
+			}
+
+			const coursesInSemester = prevData.courses.filter(
+				course => course.semester === semester
+			)
+			const orderInSemester = coursesInSemester.length + 1
+
+			const newCourse = {
+				course_id: droppedCourse.id,
 				semester: semester,
 				curriculum_id: id,
-				order_in_semester: 1
+				order_in_semester: orderInSemester
 			}
-		])
+
+			setUpdatedCourses(prevCourses => [...prevCourses, newCourse])
+			// Добавьте новый курс в локальные данные
+			const newCourseData = {
+				...newCourse,
+				course: droppedCourse
+			}
+
+			const updatedCourses = [...prevData.courses, newCourseData]
+			return {
+				...prevData,
+				courses: updatedCourses
+			}
+		})
 	}
 
 	const onSave = () => {
 		updateCurriculum({ data: updatedCourses, id })
-		setIsEditing(false) // Выключить режим редактирования после сохранения
+		onEditToggle()
+		setIsEditing(false)
 	}
 
 	const onShow = () => {
 		onEditToggle()
-		setIsEditing(true) // Включить режим редактирования
+		setIsEditing(true)
 	}
 
 	return isLoading ? (
@@ -56,7 +110,7 @@ export function Curriculum({ onEditToggle }: ICurriculumProps) {
 		</div>
 	) : (
 		<div>
-			{data ? (
+			{localData ? (
 				<div className='flex flex-col gap-[30px]'>
 					<div className='flex justify-between items-center'>
 						<div className='flex flex-col'>
@@ -65,7 +119,7 @@ export function Curriculum({ onEditToggle }: ICurriculumProps) {
 									Chosen:
 								</span>
 								<span className='font-bold text-[14px] leading-[18px] text-[#2F345C]'>
-									{data.program_title}, {data.degree_name}
+									{localData.program_title}, {localData.degree_name}
 								</span>
 							</div>
 							<div className='flex items-center gap-[5px]'>
@@ -73,7 +127,8 @@ export function Curriculum({ onEditToggle }: ICurriculumProps) {
 									Owner:
 								</span>
 								<span className='font-bold text-[14px] leading-[18px] text-[#2F345C]'>
-									{data.user.first_name} {data.user.last_name}, {data.title}
+									{localData.user.first_name} {localData.user.last_name},{' '}
+									{localData.title}
 								</span>
 							</div>
 						</div>
@@ -94,11 +149,15 @@ export function Curriculum({ onEditToggle }: ICurriculumProps) {
 						)}
 					</div>
 					<div className='flex flex-col gap-[30px]'>
-						{[...Array(data.semester_count)].map((_, index) => {
+						{[...Array(localData.semester_count)].map((_, index) => {
 							const semester = index + 1
-							const coursesInSemester = data.courses
+							console.log(localData)
+							const coursesInSemester = localData.courses
 								.filter(course => course.semester === semester)
-								.map(course => course.course)
+								.map(course => ({
+									...course.course,
+									order_in_semester: course.order_in_semester
+								}))
 							return (
 								<SemesterCoursesTable
 									key={semester}

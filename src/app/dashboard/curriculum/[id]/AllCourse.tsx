@@ -4,7 +4,9 @@ import Loader from '@/components/ui/Loader'
 
 import { useAllCourses } from '@/hooks/useAllCourses'
 
-interface Course {
+import cls from './AllCourse.module.scss'
+
+export interface Course {
 	id: string
 	course_code: string
 	title: string
@@ -21,7 +23,15 @@ interface CourseItemProps {
 const CourseItem: React.FC<CourseItemProps> = ({ course }) => {
 	const [, drag] = useDrag(() => ({
 		type: 'COURSE',
-		item: { id: course.id }
+		item: {
+			id: course.id,
+			title: course.title,
+			course_code: course.course_code,
+			ects: course.ects,
+			teor: course.teor,
+			pr: course.pr,
+			cr: course.cr
+		}
 	}))
 
 	return (
@@ -43,7 +53,7 @@ const AllCourse = () => {
 			<Loader />
 		</div>
 	) : (
-		<div>
+		<div className={cls.table}>
 			{data ? (
 				<table className='relative w-full border-collapse border border-gray-300'>
 					<tbody>

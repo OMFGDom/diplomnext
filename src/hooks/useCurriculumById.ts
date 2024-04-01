@@ -4,7 +4,7 @@ import { curriculumService } from '@/services/curriculum.service'
 
 export function useCurriculumById(id: string) {
 	const { data, isLoading, isSuccess } = useQuery({
-		queryKey: ['curriculum', id],
+		queryKey: ['curriculum by id', id],
 		queryFn: () => curriculumService.getCurriculumByID(id)
 	})
 

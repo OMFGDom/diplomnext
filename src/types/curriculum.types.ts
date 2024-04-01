@@ -68,11 +68,11 @@ interface ICurriculumByIdCourse {
 	title: string
 	teor: string
 	cr: string
-	term: string
+	term?: string
 	course_code: string
 	pr: string
 	ects: string
-	user_id: string
+	user_id?: string
 }
 
 interface ICurriculumByIdCourses {

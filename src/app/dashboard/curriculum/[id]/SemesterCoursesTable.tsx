@@ -9,16 +9,13 @@ export interface CourseEntry {
 	pr: string
 	cr: string
 	ects: string
+	order_in_semester: number
 }
 
 interface SemesterCoursesTableProps {
 	semester: number
 	courses: CourseEntry[]
-	onDrop: (courseId: string, semester: number) => void
-}
-
-interface DragItem {
-	id: string
+	onDrop: (droppedCourse: CourseEntry, semester: number) => void // Измененный тип
 }
 
 const SemesterCoursesTable: React.FC<SemesterCoursesTableProps> = ({
@@ -28,7 +25,7 @@ const SemesterCoursesTable: React.FC<SemesterCoursesTableProps> = ({
 }) => {
 	const [, drop] = useDrop(() => ({
 		accept: 'COURSE',
-		drop: (item: DragItem) => onDrop(item.id, semester),
+		drop: (item: CourseEntry) => onDrop(item, semester), // Используйте весь объект курса
 		collect: monitor => ({
 			isOver: !!monitor.isOver()
 		})
@@ -57,9 +54,11 @@ const SemesterCoursesTable: React.FC<SemesterCoursesTableProps> = ({
 					</tr>
 				</thead>
 				<tbody>
-					{courses.map((course, index) => (
+					{courses.map(course => (
 						<tr key={course.id}>
-							<td className='border border-gray-300 p-2'>{index + 1}</td>
+							<td className='border border-gray-300 p-2'>
+								{course.order_in_semester}
+							</td>
 							<td className='border border-gray-300 p-2'>
 								{course.course_code}
 							</td>

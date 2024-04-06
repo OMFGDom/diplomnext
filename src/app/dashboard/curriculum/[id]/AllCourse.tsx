@@ -14,6 +14,7 @@ export interface Course {
 	pr: string
 	cr: string
 	ects: string
+	fromAllCourses?: boolean
 }
 
 interface CourseItemProps {
@@ -30,7 +31,8 @@ const CourseItem: React.FC<CourseItemProps> = ({ course }) => {
 			ects: course.ects,
 			teor: course.teor,
 			pr: course.pr,
-			cr: course.cr
+			cr: course.cr,
+			fromAllCourses: true
 		}
 	}))
 

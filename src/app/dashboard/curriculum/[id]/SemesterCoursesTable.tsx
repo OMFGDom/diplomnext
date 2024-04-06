@@ -1,5 +1,8 @@
+import Image from 'next/image'
 import React from 'react'
-import { useDrop } from 'react-dnd'
+import { useDrag, useDrop } from 'react-dnd'
+
+import deleteIcon from '../../../../../public/delete.svg'
 
 export interface CourseEntry {
 	id: string
@@ -15,21 +18,22 @@ export interface CourseEntry {
 interface SemesterCoursesTableProps {
 	semester: number
 	courses: CourseEntry[]
-	onDrop: (droppedCourse: CourseEntry, semester: number) => void // Измененный тип
+	onMove: (draggedId: string, hoveredId: string) => void
+	onDrop: (droppedCourse: CourseEntry, semester: number) => void
+	onDelete: (courseId: string) => void
 }
 
 const SemesterCoursesTable: React.FC<SemesterCoursesTableProps> = ({
 	semester,
 	courses,
-	onDrop
+	onMove,
+	onDrop,
+	onDelete
 }) => {
-	const [, drop] = useDrop(() => ({
+	const [, drop] = useDrop({
 		accept: 'COURSE',
-		drop: (item: CourseEntry) => onDrop(item, semester), // Используйте весь объект курса
-		collect: monitor => ({
-			isOver: !!monitor.isOver()
-		})
-	}))
+		drop: (item: CourseEntry) => onDrop(item, semester)
+	})
 
 	return (
 		<div
@@ -54,26 +58,86 @@ const SemesterCoursesTable: React.FC<SemesterCoursesTableProps> = ({
 					</tr>
 				</thead>
 				<tbody>
-					{courses.map(course => (
-						<tr key={course.id}>
-							<td className='border border-gray-300 p-2'>
-								{course.order_in_semester}
-							</td>
-							<td className='border border-gray-300 p-2'>
-								{course.course_code}
-							</td>
-							<td className='border border-gray-300 p-2'>{course.title}</td>
-							<td className='border border-gray-300 p-2'>{course.teor}</td>
-							<td className='border border-gray-300 p-2'>{course.pr}</td>
-							<td className='border border-gray-300 p-2'>{course.cr}</td>
-							<td className='border border-gray-300 p-2'>{course.ects}</td>
-							<td className='border border-gray-300 p-2'>{/* Requisites */}</td>
-							<td className='border border-gray-300 p-2'>{/* Syllabus */}</td>
-						</tr>
+					{courses.map((course, index) => (
+						<CourseRow
+							key={course.id}
+							course={course}
+							index={index}
+							onMove={onMove}
+							onDelete={onDelete}
+						/>
 					))}
 				</tbody>
 			</table>
 		</div>
+	)
+}
+
+interface CourseRowProps {
+	course: CourseEntry
+	index: number
+	onMove: (draggedId: string, hoveredId: string) => void
+	onDelete: (courseId: string) => void
+}
+
+const CourseRow: React.FC<CourseRowProps> = ({
+	course,
+	index,
+	onMove,
+	onDelete
+}) => {
+	const [{ isDragging }, drag] = useDrag({
+		type: 'COURSE',
+		item: { id: course.id, index },
+		collect: monitor => ({
+			isDragging: !!monitor.isDragging()
+		})
+	})
+
+	const [, drop] = useDrop({
+		accept: 'COURSE',
+		hover: (item: { id: string; index: number }, monitor) => {
+			if (!monitor.canDrop()) return
+			if (item.id === course.id) return
+
+			const draggedIndex = item.index
+			const hoveredIndex = index
+			if (draggedIndex === hoveredIndex) return
+
+			onMove(item.id, course.id)
+			item.index = hoveredIndex
+		}
+	})
+
+	const handleDeleteCourse = () => {
+		onDelete(course.id)
+	}
+
+	return (
+		<tr
+			ref={node => drag(drop(node))}
+			className='relative'
+			style={{ opacity: isDragging ? 0.5 : 1 }}
+		>
+			<td className='border border-gray-300 p-2'>{course.order_in_semester}</td>
+			<td className='border border-gray-300 p-2'>{course.course_code}</td>
+			<td className='border border-gray-300 p-2'>{course.title}</td>
+			<td className='border border-gray-300 p-2'>{course.teor}</td>
+			<td className='border border-gray-300 p-2'>{course.pr}</td>
+			<td className='border border-gray-300 p-2'>{course.cr}</td>
+			<td className='border border-gray-300 p-2'>{course.ects}</td>
+			<td className='border border-gray-300 p-2'>{/* Requisites */}</td>
+			<td className='border border-gray-300 p-2'>{/* Syllabus */}</td>
+			<td
+				className='absolute right-[-22px] top-1/2 transform -translate-y-1/2 cursor-pointer'
+				onClick={handleDeleteCourse}
+			>
+				<Image
+					src={deleteIcon}
+					alt='delete'
+				/>
+			</td>
+		</tr>
 	)
 }
 

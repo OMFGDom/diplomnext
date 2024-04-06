@@ -18,6 +18,7 @@ export interface Course {
 	pr: string
 	cr: string
 	ects: string
+	fromAllCourses?: boolean
 }
 
 interface ICurriculumProps {
@@ -57,13 +58,19 @@ export function Curriculum({ onEditToggle }: ICurriculumProps) {
 		setLocalData(prevData => {
 			if (!prevData) return prevData
 
-			const courseExists = prevData.courses.some(
+			const courseExistsInCurriculum = prevData.courses.some(
 				curriculumCourse => curriculumCourse.course.id === droppedCourse.id
 			)
 
-			if (courseExists) {
-				toast.error('The course is already in the curriculum')
-				return prevData
+			if (droppedCourse.fromAllCourses) {
+				if (courseExistsInCurriculum) {
+					toast.error('The course is already in the curriculum')
+					return prevData
+				}
+			} else {
+				if (courseExistsInCurriculum) {
+					return prevData
+				}
 			}
 
 			const coursesInSemester = prevData.courses.filter(
@@ -78,8 +85,18 @@ export function Curriculum({ onEditToggle }: ICurriculumProps) {
 				order_in_semester: orderInSemester
 			}
 
-			setUpdatedCourses(prevCourses => [...prevCourses, newCourse])
-			// Добавьте новый курс в локальные данные
+			setUpdatedCourses(prevUpdatedCourses => {
+				const courseExistsInUpdatedCourses = prevUpdatedCourses.some(
+					updatedCourse => updatedCourse.course_id === droppedCourse.id
+				)
+
+				if (!courseExistsInUpdatedCourses) {
+					return [...prevUpdatedCourses, newCourse]
+				}
+				return prevUpdatedCourses
+			})
+
+			// Добавляем новый курс в локальные данные
 			const newCourseData = {
 				...newCourse,
 				course: droppedCourse
@@ -102,6 +119,80 @@ export function Curriculum({ onEditToggle }: ICurriculumProps) {
 	const onShow = () => {
 		onEditToggle()
 		setIsEditing(true)
+	}
+
+	const handleDeleteCourse = (courseId: string) => {
+		setLocalData(prevData => {
+			if (!prevData) return prevData
+
+			const updatedCourses = prevData.courses.filter(
+				course => course.course.id !== courseId
+			)
+
+			// Обновляем порядок курсов в семестре после удаления
+			const remainingCourses = updatedCourses.filter(
+				course =>
+					course.semester ===
+					prevData.courses.find(c => c.course.id === courseId)?.semester
+			)
+			remainingCourses.forEach((course, index) => {
+				course.order_in_semester = index + 1
+			})
+
+			return {
+				...prevData,
+				courses: updatedCourses
+			}
+		})
+
+		setUpdatedCourses(prevCourses =>
+			prevCourses.filter(course => course.course_id !== courseId)
+		)
+	}
+
+	const onMove = (draggedId: string, hoveredId: string) => {
+		setLocalData(prevData => {
+			if (!prevData) return prevData
+
+			const coursesCopy = [...prevData.courses]
+			const draggedIndex = coursesCopy.findIndex(
+				course => course.course.id === draggedId
+			)
+			const hoveredIndex = coursesCopy.findIndex(
+				course => course.course.id === hoveredId
+			)
+
+			if (draggedIndex === -1 || hoveredIndex === -1) return prevData
+
+			const draggedCourse = coursesCopy[draggedIndex]
+			coursesCopy.splice(draggedIndex, 1)
+			coursesCopy.splice(hoveredIndex, 0, draggedCourse)
+
+			// Update order_in_semester for all courses in the semester
+			coursesCopy.forEach((course, index) => {
+				if (course.semester === draggedCourse.semester) {
+					course.order_in_semester = index + 1
+				}
+			})
+
+			// Обновите updatedCourses, чтобы отразить новый порядок
+			const updatedUpdatedCourses = updatedCourses.map(course => {
+				const foundCourse = coursesCopy.find(
+					c => c.course.id === course.course_id
+				)
+				if (foundCourse) {
+					return { ...course, order_in_semester: foundCourse.order_in_semester }
+				}
+				return course
+			})
+
+			setUpdatedCourses(updatedUpdatedCourses)
+
+			return {
+				...prevData,
+				courses: coursesCopy
+			}
+		})
 	}
 
 	return isLoading ? (
@@ -151,7 +242,6 @@ export function Curriculum({ onEditToggle }: ICurriculumProps) {
 					<div className='flex flex-col gap-[30px]'>
 						{[...Array(localData.semester_count)].map((_, index) => {
 							const semester = index + 1
-							console.log(localData)
 							const coursesInSemester = localData.courses
 								.filter(course => course.semester === semester)
 								.map(course => ({
@@ -163,7 +253,9 @@ export function Curriculum({ onEditToggle }: ICurriculumProps) {
 									key={semester}
 									semester={semester}
 									courses={coursesInSemester}
+									onMove={onMove}
 									onDrop={onDrop}
+									onDelete={handleDeleteCourse}
 								/>
 							)
 						})}

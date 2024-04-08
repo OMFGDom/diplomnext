@@ -103,6 +103,14 @@ export function Curriculum({ onEditToggle }: ICurriculumProps) {
 			}
 
 			const updatedCourses = [...prevData.courses, newCourseData]
+
+			// Обновляем порядок курсов в семестре
+			updatedCourses
+				.filter(course => course.semester === semester)
+				.forEach((course, index) => {
+					course.order_in_semester = index + 1
+				})
+
 			return {
 				...prevData,
 				courses: updatedCourses
@@ -169,11 +177,11 @@ export function Curriculum({ onEditToggle }: ICurriculumProps) {
 			coursesCopy.splice(hoveredIndex, 0, draggedCourse)
 
 			// Update order_in_semester for all courses in the semester
-			coursesCopy.forEach((course, index) => {
-				if (course.semester === draggedCourse.semester) {
+			coursesCopy
+				.filter(course => course.semester === draggedCourse.semester)
+				.forEach((course, index) => {
 					course.order_in_semester = index + 1
-				}
-			})
+				})
 
 			// Обновите updatedCourses, чтобы отразить новый порядок
 			const updatedUpdatedCourses = updatedCourses.map(course => {
@@ -256,6 +264,7 @@ export function Curriculum({ onEditToggle }: ICurriculumProps) {
 									onMove={onMove}
 									onDrop={onDrop}
 									onDelete={handleDeleteCourse}
+									isEditing={isEditing} // Добавьте эту строку
 								/>
 							)
 						})}

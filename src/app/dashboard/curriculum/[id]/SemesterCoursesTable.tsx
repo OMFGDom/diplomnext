@@ -21,6 +21,7 @@ interface SemesterCoursesTableProps {
 	onMove: (draggedId: string, hoveredId: string) => void
 	onDrop: (droppedCourse: CourseEntry, semester: number) => void
 	onDelete: (courseId: string) => void
+	isEditing: boolean // Добавьте эту строку
 }
 
 const SemesterCoursesTable: React.FC<SemesterCoursesTableProps> = ({
@@ -28,7 +29,8 @@ const SemesterCoursesTable: React.FC<SemesterCoursesTableProps> = ({
 	courses,
 	onMove,
 	onDrop,
-	onDelete
+	onDelete,
+	isEditing
 }) => {
 	const [, drop] = useDrop({
 		accept: 'COURSE',
@@ -65,6 +67,7 @@ const SemesterCoursesTable: React.FC<SemesterCoursesTableProps> = ({
 							index={index}
 							onMove={onMove}
 							onDelete={onDelete}
+							isEditing={isEditing} // Добавьте эту строку
 						/>
 					))}
 				</tbody>
@@ -78,17 +81,20 @@ interface CourseRowProps {
 	index: number
 	onMove: (draggedId: string, hoveredId: string) => void
 	onDelete: (courseId: string) => void
+	isEditing: boolean // Добавьте эту строку
 }
 
 const CourseRow: React.FC<CourseRowProps> = ({
 	course,
 	index,
 	onMove,
-	onDelete
+	onDelete,
+	isEditing
 }) => {
 	const [{ isDragging }, drag] = useDrag({
 		type: 'COURSE',
 		item: { id: course.id, index },
+		canDrag: isEditing, // Добавьте эту строку
 		collect: monitor => ({
 			isDragging: !!monitor.isDragging()
 		})
@@ -96,6 +102,7 @@ const CourseRow: React.FC<CourseRowProps> = ({
 
 	const [, drop] = useDrop({
 		accept: 'COURSE',
+		canDrop: () => isEditing, // Добавьте эту строку
 		hover: (item: { id: string; index: number }, monitor) => {
 			if (!monitor.canDrop()) return
 			if (item.id === course.id) return
@@ -128,15 +135,17 @@ const CourseRow: React.FC<CourseRowProps> = ({
 			<td className='border border-gray-300 p-2'>{course.ects}</td>
 			<td className='border border-gray-300 p-2'>{/* Requisites */}</td>
 			<td className='border border-gray-300 p-2'>{/* Syllabus */}</td>
-			<td
-				className='absolute right-[-22px] top-1/2 transform -translate-y-1/2 cursor-pointer'
-				onClick={handleDeleteCourse}
-			>
-				<Image
-					src={deleteIcon}
-					alt='delete'
-				/>
-			</td>
+			{isEditing && (
+				<td
+					className='absolute right-[-22px] top-1/2 transform -translate-y-1/2 cursor-pointer'
+					onClick={handleDeleteCourse}
+				>
+					<Image
+						src={deleteIcon}
+						alt='delete'
+					/>
+				</td>
+			)}
 		</tr>
 	)
 }

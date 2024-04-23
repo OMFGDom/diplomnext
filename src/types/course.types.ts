@@ -10,4 +10,18 @@ export interface ICourse {
 	id: string
 }
 
+export interface ICourseAdd {
+	title: string
+	title_kz: string
+	title_ru: string
+	course_code: string
+	teor: number
+	pr: string
+	cr: number
+	ects: number
+	term: string
+	sub_ids: string[] // массив строк, предположительно идентификаторы курсов
+	pre_ids: string[] // массив строк, предположительно идентификаторы курсов
+}
+
 export type AllCoursesResponse = ICourse[]

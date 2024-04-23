@@ -5,7 +5,7 @@ class DASHBOARD {
 	REGISTRATION = `${this.root}/curriculum-registration`
 	CURRICULA = `${this.root}/curricula`
 	HISTORY = `${this.root}/history`
-	ADDCOURSE = `${this.root}/addcourse`
+	ADDCOURSE = `${this.root}/add-course`
 	PROFILE = `${this.root}/profile`
 }
 

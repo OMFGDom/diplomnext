@@ -1,4 +1,4 @@
-import { AllCoursesResponse } from '@/types/course.types'
+import { AllCoursesResponse, ICourseAdd } from '@/types/course.types'
 
 import { axiosWithAuth } from '@/api/interceptors'
 
@@ -8,6 +8,13 @@ class CoursesService {
 	async getAllCourses() {
 		const response = await axiosWithAuth.get<AllCoursesResponse>(
 			`${this.BASE_URL}/get_all_courses`
+		)
+		return response.data
+	}
+	async addCourse(course: ICourseAdd) {
+		const response = await axiosWithAuth.post<ICourseAdd>(
+			`${this.BASE_URL}`,
+			course
 		)
 		return response.data
 	}

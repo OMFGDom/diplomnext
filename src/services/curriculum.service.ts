@@ -43,6 +43,23 @@ class CurriculumService {
 		)
 		return response.data
 	}
+	async deleteCurriculum(id: string) {
+		const response = await axiosWithAuth.delete(`${this.BASE_URL}/${id}`)
+		return response.data
+	}
+	async getExcelCurriculum(id: string) {
+		const response = await axiosWithAuth.get(
+			`${this.BASE_URL}/download_curriculum?curriculum_id=${id}`,
+			{ responseType: 'blob' }
+		)
+		return response.data
+	}
+	async setCurriculumAsMain(id: string) {
+		const response = await axiosWithAuth.put(
+			`${this.BASE_URL}/set_main_curriculum?curriculum_id=${id}`
+		)
+		return response.data
+	}
 }
 
 export const curriculumService = new CurriculumService()

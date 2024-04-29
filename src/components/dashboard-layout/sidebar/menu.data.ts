@@ -1,9 +1,12 @@
 import {
+	BadgePlus,
 	CirclePlus,
+	GalleryVerticalEnd,
 	History,
 	NotebookPen,
 	NotebookText,
-	UserRound
+	UserRound,
+	Users
 } from 'lucide-react'
 
 import { DASHBOARD_PAGES } from '@/config/pages-url.config'
@@ -30,9 +33,24 @@ export const MENU_INFORMATION: IMenuItem[] = [
 		name: 'History'
 	},
 	{
+		icon: GalleryVerticalEnd,
+		link: DASHBOARD_PAGES.ALLCOURSES,
+		name: 'ALL Courses'
+	},
+	{
 		icon: CirclePlus,
 		link: DASHBOARD_PAGES.ADDCOURSE,
 		name: 'Add courses'
+	},
+	{
+		icon: Users,
+		link: DASHBOARD_PAGES.USERS,
+		name: 'Users'
+	},
+	{
+		icon: BadgePlus,
+		link: DASHBOARD_PAGES.ADDUSER,
+		name: 'Add User'
 	}
 ]
 

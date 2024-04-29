@@ -16,9 +16,9 @@ import { coursesService } from '@/services/course.service'
 
 const CourseForm = () => {
 	const { register, handleSubmit, reset } = useForm<ICourseAdd>()
-	const queryClient = useQueryClient()
 	const [selectedSubIds, setSelectedSubIds] = useState<string[]>([])
 	const [selectedPreIds, setSelectedPreIds] = useState<string[]>([])
+	const queryClient = useQueryClient()
 
 	const { mutate } = useMutation({
 		mutationKey: ['addCourse'],

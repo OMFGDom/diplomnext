@@ -24,4 +24,8 @@ export interface ICourseAdd {
 	pre_ids: string[] // массив строк, предположительно идентификаторы курсов
 }
 
+export interface ICourseDelete {
+	id: string
+}
+
 export type AllCoursesResponse = ICourse[]

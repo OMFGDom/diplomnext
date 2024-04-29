@@ -18,6 +18,10 @@ class CoursesService {
 		)
 		return response.data
 	}
+	async deleteCourse(id: string) {
+		const response = await axiosWithAuth.delete(`${this.BASE_URL}/${id}`)
+		return response.data
+	}
 }
 
 export const coursesService = new CoursesService()

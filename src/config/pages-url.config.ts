@@ -7,6 +7,9 @@ class DASHBOARD {
 	HISTORY = `${this.root}/history`
 	ADDCOURSE = `${this.root}/add-course`
 	PROFILE = `${this.root}/profile`
+	ALLCOURSES = `${this.root}/all-courses`
+	USERS = `${this.root}/users`
+	ADDUSER = `${this.root}/add-user`
 }
 
 export const DASHBOARD_PAGES = new DASHBOARD()

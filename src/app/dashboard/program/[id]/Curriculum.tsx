@@ -1,6 +1,6 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 
 import Loader from '@/components/ui/Loader'
 
@@ -10,8 +10,10 @@ import SemesterCoursesTable from './SemesterCoursesTable'
 
 export function Curriculum() {
 	const params = useParams()
+	const searchParams = useSearchParams()
 	const id = params.id as string
-	const { data, isLoading } = useCurriculumMain(id)
+	const year = searchParams.get('year') as string
+	const { data, isLoading } = useCurriculumMain(id, year)
 
 	return isLoading ? (
 		<div className='flex w-full h-max justify-center'>

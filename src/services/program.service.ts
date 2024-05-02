@@ -11,9 +11,9 @@ type IProgramByIDResponse = IProgram[]
 class ProgramService {
 	private BASE_URL = 'v1/program'
 
-	async getMainPrograms() {
+	async getMainPrograms(year: number) {
 		const response = await axiosWithAuth.get<IProgramResponse>(
-			`${this.BASE_URL}/list_main_programs`
+			`${this.BASE_URL}/list_main_programs?year=${year}`
 		)
 		return response.data
 	}

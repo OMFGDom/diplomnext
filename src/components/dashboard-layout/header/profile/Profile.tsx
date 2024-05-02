@@ -22,12 +22,15 @@ export function Profile() {
 					<p>
 						{data?.first_name || 'Пользователь'} {data?.last_name || '1'}
 					</p>
-					<Image
-						src={data?.profile_image || ProfileImage}
-						alt='profile'
-						width={40}
-						height={40}
-					/>
+					<div className='w-[40px] h-[40px] rounded-full'>
+						<Image
+							src={data?.profile_image || ProfileImage}
+							alt='profile'
+							width={40}
+							height={40}
+							className='rounded-full w-[40px] h-[40px] object-cover'
+						/>
+					</div>
 				</div>
 			)}
 		</div>

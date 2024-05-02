@@ -7,7 +7,12 @@ import SidebarImage from '../../../../public/sidebar.png'
 
 import { LogoutButton } from './LogoutButton'
 import { MenuItem } from './MenuItem'
-import { MENU_INFORMATION, MENU_OPERATION, MENU_PROFILE } from './menu.data'
+import {
+	MENU_ADMIN,
+	MENU_INFORMATION,
+	MENU_OPERATION,
+	MENU_PROFILE
+} from './menu.data'
 
 interface SidebarProps {
 	isOpen: boolean
@@ -35,7 +40,7 @@ export function Sidebar({ isOpen }: SidebarProps) {
 						priority={true}
 					/>
 				</Link>
-				<div className='grid grid-cols-1 gap-[80px]'>
+				<div className='grid grid-cols-1 gap-[50px]'>
 					<div className='flex flex-col'>
 						<span className='block mb-[20px] font-light text-[15px] leading[22px] text-[#fff]'>
 							ACADEMIC OPERATIONS
@@ -68,7 +73,20 @@ export function Sidebar({ isOpen }: SidebarProps) {
 								key={item.link}
 							/>
 						))}
-						<LogoutButton />
+					</div>
+					<div className='flex flex-col'>
+						<span className='block mb-[20px] font-light text-[15px] leading[22px] text-[#fff]'>
+							ADMIN
+						</span>
+						{MENU_ADMIN.map(item => (
+							<MenuItem
+								item={item}
+								key={item.link}
+							/>
+						))}
+						<div className='mt-10'>
+							<LogoutButton />
+						</div>
 					</div>
 				</div>
 			</div>

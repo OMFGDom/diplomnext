@@ -47,7 +47,7 @@ const CourseItem: React.FC<CourseItemProps> = ({ course }) => {
 	}
 
 	const handleEditCourse = () => {
-		router.push(`/course/${course.id}`) // Используем push для навигации
+		router.push(`course/${course.id}`) // Используем push для навигации
 	}
 
 	return (
@@ -88,6 +88,16 @@ const AllCourseTable = () => {
 		<div className='h-full'>
 			{courses ? (
 				<table className='relative w-full border-collapse border border-gray-300'>
+					<thead>
+						<tr>
+							<th className='border border-gray-300 p-2'>Course code</th>
+							<th className='border border-gray-300 p-2'>Title</th>
+							<th className='border border-gray-300 p-2'>Teor</th>
+							<th className='border border-gray-300 p-2'>Pr</th>
+							<th className='border border-gray-300 p-2'>Cr</th>
+							<th className='border border-gray-300 p-2'>Ects</th>
+						</tr>
+					</thead>
 					<tbody>
 						{courses.map(course => (
 							<CourseItem

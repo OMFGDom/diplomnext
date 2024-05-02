@@ -2,7 +2,6 @@ import {
 	BadgePlus,
 	CirclePlus,
 	GalleryVerticalEnd,
-	History,
 	NotebookPen,
 	NotebookText,
 	UserRound,
@@ -24,14 +23,14 @@ export const MENU_OPERATION: IMenuItem[] = [
 export const MENU_INFORMATION: IMenuItem[] = [
 	{
 		icon: NotebookText,
-		link: DASHBOARD_PAGES.REGISTRATION,
+		link: DASHBOARD_PAGES.HOME,
 		name: 'Curricula'
 	},
-	{
-		icon: History,
-		link: DASHBOARD_PAGES.HISTORY,
-		name: 'History'
-	},
+	// {
+	// 	icon: History,
+	// 	link: DASHBOARD_PAGES.HISTORY,
+	// 	name: 'History'
+	// },
 	{
 		icon: GalleryVerticalEnd,
 		link: DASHBOARD_PAGES.ALLCOURSES,
@@ -41,7 +40,28 @@ export const MENU_INFORMATION: IMenuItem[] = [
 		icon: CirclePlus,
 		link: DASHBOARD_PAGES.ADDCOURSE,
 		name: 'Add courses'
-	},
+	}
+	// {
+	// 	icon: Users,
+	// 	link: DASHBOARD_PAGES.USERS,
+	// 	name: 'Users'
+	// },
+	// {
+	// 	icon: BadgePlus,
+	// 	link: DASHBOARD_PAGES.ADDUSER,
+	// 	name: 'Add User'
+	// }
+]
+
+export const MENU_PROFILE: IMenuItem[] = [
+	{
+		icon: UserRound,
+		link: DASHBOARD_PAGES.REGISTRATION,
+		name: 'Profile'
+	}
+]
+
+export const MENU_ADMIN: IMenuItem[] = [
 	{
 		icon: Users,
 		link: DASHBOARD_PAGES.USERS,
@@ -51,13 +71,5 @@ export const MENU_INFORMATION: IMenuItem[] = [
 		icon: BadgePlus,
 		link: DASHBOARD_PAGES.ADDUSER,
 		name: 'Add User'
-	}
-]
-
-export const MENU_PROFILE: IMenuItem[] = [
-	{
-		icon: UserRound,
-		link: DASHBOARD_PAGES.REGISTRATION,
-		name: 'Profile'
 	}
 ]

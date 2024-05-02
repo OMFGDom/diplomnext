@@ -12,7 +12,7 @@ export const metadata = {
 export default function DashboardPage() {
 	return (
 		<>
-			<Heading title='Elective courses' />
+			<Heading title='All courses' />
 			<div className='flex flex-col w-full h-auto p-[24px] bg-[#fff] rounded-[10px]'>
 				<div className='flex flex-col w-3/5'>
 					<AllCourseTable />

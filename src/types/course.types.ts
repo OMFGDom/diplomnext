@@ -20,8 +20,8 @@ export interface ICourseAdd {
 	cr: number
 	ects: number
 	term: string
-	sub_ids: string[] // массив строк, предположительно идентификаторы курсов
-	pre_ids: string[] // массив строк, предположительно идентификаторы курсов
+	sub_ids: string[]
+	pre_ids: string[]
 }
 
 export interface ICourseDelete {
@@ -29,3 +29,45 @@ export interface ICourseDelete {
 }
 
 export type AllCoursesResponse = ICourse[]
+
+interface Prerequisite {
+	title?: string
+	title_kz?: string
+	title_ru?: string
+	course_code?: string
+	teor?: number
+	pr?: string
+	cr?: number
+	ects?: number
+	term?: string | null
+	user_id?: string
+	id?: string
+}
+
+interface Subcourse {
+	title?: string
+	title_kz?: string
+	title_ru?: string
+	course_code?: string
+	teor?: number
+	pr?: string
+	cr?: number
+	ects?: number
+	term?: string | null
+	user_id?: string
+	id?: string
+}
+
+export interface ICourseSingle {
+	title: string
+	title_kz?: string
+	title_ru?: string
+	course_code?: string
+	teor?: number
+	pr?: string
+	cr?: number
+	ects?: number
+	term?: string | null
+	prerequisites: Prerequisite[]
+	subcourses: Subcourse[]
+}

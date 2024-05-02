@@ -56,3 +56,7 @@ export interface ICreateUser {
 	faculty_id: string
 	profile_image: string
 }
+
+export interface IUpdateUser extends ICreateUser {
+	old_password: string
+}

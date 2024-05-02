@@ -16,7 +16,7 @@ const UserList: React.FC = () => {
 			{users.map((user, index) => (
 				<li key={user.id}>
 					<Link
-						href={`/user/${user.id}`}
+						href={`user/${user.id}`}
 						className=''
 					>
 						{index + 1}.{' '}

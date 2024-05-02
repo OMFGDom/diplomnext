@@ -1,4 +1,8 @@
-import { AllCoursesResponse, ICourseAdd } from '@/types/course.types'
+import {
+	AllCoursesResponse,
+	ICourseAdd,
+	ICourseSingle
+} from '@/types/course.types'
 
 import { axiosWithAuth } from '@/api/interceptors'
 
@@ -20,6 +24,19 @@ class CoursesService {
 	}
 	async deleteCourse(id: string) {
 		const response = await axiosWithAuth.delete(`${this.BASE_URL}/${id}`)
+		return response.data
+	}
+	async updateCourse(course: ICourseAdd, id: string) {
+		const response = await axiosWithAuth.put<ICourseAdd>(
+			`${this.BASE_URL}/${id}`,
+			course
+		)
+		return response.data
+	}
+	async getCourseById(id: string) {
+		const response = await axiosWithAuth.get<ICourseSingle>(
+			`${this.BASE_URL}/${id}`
+		)
 		return response.data
 	}
 }

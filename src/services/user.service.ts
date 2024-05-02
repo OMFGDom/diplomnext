@@ -22,6 +22,20 @@ class UserService {
 		})
 		return response.data
 	}
+	async getUserById(id: string) {
+		const response = await axiosWithAuth.get<IUser>(`${this.BASE_URL}/${id}`)
+		return response.data
+	}
+	async updateUser(id: string, userData: FormData) {
+		const response = await axiosWithAuth.put(
+			`${this.BASE_URL}/${id}`,
+			userData,
+			{
+				headers: { 'Content-Type': 'multipart/form-data' }
+			}
+		)
+		return response.data
+	}
 }
 
 export const userService = new UserService()

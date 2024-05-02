@@ -2,51 +2,27 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
-import { useParams, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
+import Loader from '@/components/ui/Loader'
 import { Button } from '@/components/ui/buttons/Button'
 import { Field } from '@/components/ui/fields/Fields'
 
 import { IUpdateUser } from '@/types/auth.types'
 import { IFacultyList } from '@/types/faculty.types'
 
+import { useProfile } from '@/hooks/useProfile'
+
 import { facultyService } from '@/services/faculty.service'
 import { userService } from '@/services/user.service'
 
-const EditForm = () => {
-	const params = useParams()
-	const id = params.id as string
-	const [faculties, setFaculties] = useState<IFacultyList>([])
-	const { register, handleSubmit, reset, setValue } = useForm<IUpdateUser>({
-		defaultValues: {
-			faculty_id: faculties[0]?.id ?? ''
-		}
-	})
-	const [fileName, setFileName] = useState<string>('')
-	const [selectedFile, setSelectedFile] = useState<File | null>(null)
-	const [profileImage, setProfileImage] = useState<string>('')
-	const [isSuperuser, setIsSuperuser] = useState<boolean>(false)
-	const [isActive, setIsActive] = useState<boolean>(true)
-	const queryClient = useQueryClient()
-	const router = useRouter()
+const ProfileForm = () => {
+	const { data: user, isLoading, isSuccess } = useProfile()
 
-	// Fetch faculties and user data
-	useQuery({
-		queryKey: ['faculties'],
-		queryFn: async () => {
-			const facultyList = await facultyService.getAllFaculties()
-			setFaculties(facultyList)
-			return facultyList
-		}
-	})
-
-	useQuery({
-		queryKey: ['user', id],
-		queryFn: async () => {
-			const user = await userService.getUserById(id)
+	useEffect(() => {
+		if (isSuccess && user) {
 			setValue('first_name', user.first_name)
 			setValue('last_name', user.last_name)
 			setValue('email', user.email)
@@ -54,7 +30,24 @@ const EditForm = () => {
 			setIsSuperuser(user.is_superuser === true)
 			setIsActive(user.is_active === true)
 			setProfileImage(user.profile_image)
-			return user
+		}
+	}, [isSuccess, user])
+
+	const [faculties, setFaculties] = useState<IFacultyList>([])
+	const { register, handleSubmit, reset, setValue } = useForm<IUpdateUser>({})
+	const [fileName, setFileName] = useState<string>('')
+	const [selectedFile, setSelectedFile] = useState<File | null>(null)
+	const [profileImage, setProfileImage] = useState<string>('')
+	const [isSuperuser, setIsSuperuser] = useState<boolean>(false)
+	const [isActive, setIsActive] = useState<boolean>(true)
+	const queryClient = useQueryClient()
+
+	useQuery({
+		queryKey: ['faculties'],
+		queryFn: async () => {
+			const facultyList = await facultyService.getAllFaculties()
+			setFaculties(facultyList)
+			return facultyList
 		}
 	})
 
@@ -91,18 +84,16 @@ const EditForm = () => {
 				formData.append('profile_image', selectedFile)
 			}
 
-			return userService.updateUser(id, formData)
+			return userService.updateUser(user?.id ?? '', formData)
 		},
 		onSuccess: () => {
 			reset()
-			queryClient.invalidateQueries({ queryKey: ['users'] })
-			toast.success('Successfully updated user!')
-			router.push('../users')
+			queryClient.invalidateQueries({ queryKey: ['profile'] })
+			toast.success('Successfully updated profile!')
 		},
 		onError: error => {
-			let errorMessage = `Error updating user: ${error}`
+			let errorMessage = `Error updating profile: ${error}`
 
-			// Check if error has a response and cast it
 			if (typeof error === 'object' && error !== null && 'response' in error) {
 				const responseError = error.response as { data: { detail?: string } }
 
@@ -133,6 +124,14 @@ const EditForm = () => {
 		mutate(data)
 	}
 
+	if (isLoading) {
+		return (
+			<div className='flex mx-auto justify-center'>
+				<Loader />
+			</div>
+		)
+	}
+
 	return (
 		<div className='p-4 w-3/5'>
 			<form
@@ -161,95 +160,109 @@ const EditForm = () => {
 						placeholder='Enter the email'
 						extra='mb-6 max-w-full w/full'
 					/>
-					<label
-						htmlFor='faculty_id'
-						className='block text-sm font-medium'
-					>
-						Faculty
-					</label>
-					<select
-						{...register('faculty_id')}
-						id='faculty_id'
-						className='border rounded-lg p-2 w/full'
-					>
-						{faculties.map(faculty => (
-							<option
-								key={faculty.id}
-								value={faculty.id}
+					{isSuperuser && (
+						<>
+							<label
+								htmlFor='faculty_id'
+								className='block text-sm font-medium'
 							>
-								{faculty.title}
-							</option>
-						))}
-					</select>
+								Faculty
+							</label>
+							<select
+								{...register('faculty_id')}
+								id='faculty_id'
+								className='border rounded-lg p-2 w/full'
+							>
+								{faculties.map(faculty => (
+									<option
+										key={faculty.id}
+										value={faculty.id}
+									>
+										{faculty.title}
+									</option>
+								))}
+							</select>
+						</>
+					)}
 
-					<label
-						htmlFor='is_superuser'
-						className='block text-sm font-medium'
-					>
-						Is Superuser
-					</label>
-					<div className='flex items-center'>
-						<input
-							type='radio'
-							checked={isSuperuser === true} // Directly check based on state
-							onChange={() => setIsSuperuser(true)}
-							id='is_superuser_true'
-						/>
-						<label
-							htmlFor='is_superuser_true'
-							className='ml-2'
-						>
-							Yes
-						</label>
+					{isSuperuser && (
+						<>
+							<label
+								htmlFor='is_active'
+								className='block text-sm font-medium'
+							>
+								Is Active
+							</label>
+							<div className='flex items-center'>
+								<input
+									type='radio'
+									checked={isActive === true}
+									onChange={() => setIsActive(true)}
+									id='is_active_true'
+								/>
+								<label
+									htmlFor='is_active_true'
+									className='ml-2'
+								>
+									Yes
+								</label>
 
-						<input
-							type='radio'
-							checked={isSuperuser === false} // Directly check based on state
-							onChange={() => setIsSuperuser(false)}
-							id='is_superuser_false'
-							className='ml-4'
-						/>
-						<label
-							htmlFor='is_superuser_false'
-							className='ml-2'
-						>
-							No
-						</label>
-					</div>
-					<label
-						htmlFor='is_active'
-						className='block text-sm font-medium'
-					>
-						Is Active
-					</label>
-					<div className='flex items-center'>
-						<input
-							type='radio'
-							checked={isActive === true}
-							onChange={() => setIsActive(true)}
-							id='is_active_true'
-						/>
-						<label
-							htmlFor='is_active_true'
-							className='ml-2'
-						>
-							Yes
-						</label>
+								<input
+									type='radio'
+									checked={isActive === false}
+									onChange={() => setIsActive(false)}
+									id='is_active_false'
+									className='ml-4'
+								/>
+								<label
+									htmlFor='is_active_false'
+									className='ml-2'
+								>
+									No
+								</label>
+							</div>
+						</>
+					)}
 
-						<input
-							type='radio'
-							checked={isActive === false}
-							onChange={() => setIsActive(false)}
-							id='is_active_false'
-							className='ml-4'
-						/>
-						<label
-							htmlFor='is_active_false'
-							className='ml-2'
-						>
-							No
-						</label>
-					</div>
+					{isSuperuser && (
+						<>
+							<label
+								htmlFor='is_superuser'
+								className='block text-sm font-medium'
+							>
+								Is Superuser
+							</label>
+							<div className='flex items-center'>
+								<input
+									type='radio'
+									checked={isSuperuser === true}
+									onChange={() => setIsSuperuser(true)}
+									id='is_superuser_true'
+								/>
+								<label
+									htmlFor='is_superuser_true'
+									className='ml-2'
+								>
+									Yes
+								</label>
+
+								<input
+									type='radio'
+									checked={!isSuperuser}
+									onChange={() => setIsSuperuser(false)}
+									id='is_superuser_false'
+									className='ml-4'
+								/>
+								<label
+									htmlFor='is_superuser_false'
+									className='ml-2'
+								>
+									No
+								</label>
+							</div>
+						</>
+					)}
+
 					<label
 						htmlFor='profile_image'
 						className='block text-sm font-medium'
@@ -311,11 +324,11 @@ const EditForm = () => {
 					type='submit'
 					className='w/full bg-[#1F2150] text-white rounded-lg'
 				>
-					Update User
+					Update Profile
 				</Button>
 			</form>
 		</div>
 	)
 }
 
-export default EditForm
+export default ProfileForm

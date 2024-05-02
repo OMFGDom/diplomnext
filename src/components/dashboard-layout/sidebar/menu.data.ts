@@ -41,22 +41,12 @@ export const MENU_INFORMATION: IMenuItem[] = [
 		link: DASHBOARD_PAGES.ADDCOURSE,
 		name: 'Add courses'
 	}
-	// {
-	// 	icon: Users,
-	// 	link: DASHBOARD_PAGES.USERS,
-	// 	name: 'Users'
-	// },
-	// {
-	// 	icon: BadgePlus,
-	// 	link: DASHBOARD_PAGES.ADDUSER,
-	// 	name: 'Add User'
-	// }
 ]
 
 export const MENU_PROFILE: IMenuItem[] = [
 	{
 		icon: UserRound,
-		link: DASHBOARD_PAGES.REGISTRATION,
+		link: DASHBOARD_PAGES.PROFILE,
 		name: 'Profile'
 	}
 ]

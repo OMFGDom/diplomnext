@@ -3,6 +3,11 @@ export interface IAuthForm {
 	password: string
 }
 
+export interface IResetPassword {
+	new_password: string
+	repeat_new_password: string
+}
+
 export interface IUser {
 	id: string
 	email: string
@@ -49,7 +54,7 @@ export interface ICreateUser {
 	email: string
 	first_name: string
 	last_name: string
-	password: string
+	password?: string
 	last_login_at: string
 	is_active: boolean
 	is_superuser: boolean
@@ -58,5 +63,5 @@ export interface ICreateUser {
 }
 
 export interface IUpdateUser extends ICreateUser {
-	old_password: string
+	old_password?: string
 }

@@ -3,6 +3,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { useProfile } from '@/hooks/useProfile'
+
 import SidebarImage from '../../../../public/sidebar.png'
 
 import { LogoutButton } from './LogoutButton'
@@ -19,6 +21,8 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen }: SidebarProps) {
+	const { data: user } = useProfile()
+
 	return (
 		<aside
 			className={
@@ -75,15 +79,19 @@ export function Sidebar({ isOpen }: SidebarProps) {
 						))}
 					</div>
 					<div className='flex flex-col'>
-						<span className='block mb-[20px] font-light text-[15px] leading[22px] text-[#fff]'>
-							ADMIN
-						</span>
-						{MENU_ADMIN.map(item => (
-							<MenuItem
-								item={item}
-								key={item.link}
-							/>
-						))}
+						{user && user.is_superuser && (
+							<>
+								<span className='block mb-[20px] font-light text-[15px] leading[22px] text-[#fff]'>
+									ADMIN
+								</span>
+								{MENU_ADMIN.map(item => (
+									<MenuItem
+										item={item}
+										key={item.link}
+									/>
+								))}
+							</>
+						)}
 						<div className='mt-10'>
 							<LogoutButton />
 						</div>

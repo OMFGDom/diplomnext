@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -19,7 +19,7 @@ const UserForm = () => {
 	const [faculties, setFaculties] = useState<IFacultyList>([])
 	const { register, handleSubmit, reset, setValue } = useForm<ICreateUser>({
 		defaultValues: {
-			faculty_id: faculties[0]?.id ?? ''
+			faculty_id: ''
 		}
 	})
 	const [fileName, setFileName] = useState<string>('')
@@ -36,6 +36,12 @@ const UserForm = () => {
 			return facultyList
 		}
 	})
+
+	useEffect(() => {
+		if (faculties.length > 0) {
+			setValue('faculty_id', faculties[0].id)
+		}
+	}, [faculties, setValue])
 
 	const { mutate } = useMutation({
 		mutationKey: ['createUser'],
@@ -162,6 +168,40 @@ const UserForm = () => {
 						/>
 						<label
 							htmlFor='is_superuser_false'
+							className='ml-2'
+						>
+							No
+						</label>
+					</div>
+
+					<label
+						htmlFor='is_active'
+						className='block text-sm font-medium'
+					>
+						Is Active
+					</label>
+					<div className='flex items-center'>
+						<input
+							type='radio'
+							{...register('is_active')}
+							id='is_active_true'
+							value='true'
+						/>
+						<label
+							htmlFor='is_active_true'
+							className='ml-2'
+						>
+							Yes
+						</label>
+
+						<input
+							type='radio'
+							{...register('is_active')}
+							id='is_active_false'
+							className='ml-4'
+						/>
+						<label
+							htmlFor='is_active_false'
 							className='ml-2'
 						>
 							No

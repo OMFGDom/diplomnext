@@ -42,6 +42,10 @@ export function Auth() {
 		}
 	})
 
+	const pushToForgotPassword = () => {
+		push('/forgot-password')
+	}
+
 	const onSubmit: SubmitHandler<IAuthForm> = data => {
 		mutate(data)
 	}
@@ -89,7 +93,12 @@ export function Auth() {
 					>
 						Login
 					</Button>
-					<span>Forgot my password?</span>
+					<span
+						onClick={() => pushToForgotPassword()}
+						className='cursor-pointer underline text-[#2F345C]'
+					>
+						Forgot password?
+					</span>
 				</div>
 			</form>
 			<div className='fixed bottom-0 left-0 w-full bg-[#1f2150]'>

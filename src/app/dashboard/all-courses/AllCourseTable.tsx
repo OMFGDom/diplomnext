@@ -21,6 +21,7 @@ export interface Course {
 	pr: string
 	cr: string
 	ects: string
+	term: string
 	fromAllCourses?: boolean
 }
 
@@ -58,6 +59,7 @@ const CourseItem: React.FC<CourseItemProps> = ({ course }) => {
 			<td className='border border-gray-300 p-2'>{course.pr}</td>
 			<td className='border border-gray-300 p-2'>{course.cr}</td>
 			<td className='border border-gray-300 p-2'>{course.ects}</td>
+			<td className='border border-gray-300 p-2'>{course.term}</td>
 			<td
 				className='absolute right-[-22px] top-1/2 transform -translate-y-1/2 cursor-pointer'
 				onClick={handleDeleteCourse}
@@ -96,6 +98,7 @@ const AllCourseTable = () => {
 							<th className='border border-gray-300 p-2'>Pr</th>
 							<th className='border border-gray-300 p-2'>Cr</th>
 							<th className='border border-gray-300 p-2'>Ects</th>
+							<th className='border border-gray-300 p-2'>Term</th>
 						</tr>
 					</thead>
 					<tbody>

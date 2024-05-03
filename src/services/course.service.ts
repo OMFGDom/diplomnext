@@ -1,4 +1,5 @@
 import {
+	AllCourseBulkCreateResponse,
 	AllCoursesResponse,
 	ICourseAdd,
 	ICourseSingle
@@ -37,6 +38,32 @@ class CoursesService {
 		const response = await axiosWithAuth.get<ICourseSingle>(
 			`${this.BASE_URL}/${id}`
 		)
+		return response.data
+	}
+	async uploadExcel(formData: FormData) {
+		const config = {
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		}
+
+		const response = await axiosWithAuth.post<AllCourseBulkCreateResponse>(
+			`${this.BASE_URL}/upload_excel`,
+			formData,
+			config
+		)
+		return response.data
+	}
+
+	async bulkCreateCourse(course: AllCourseBulkCreateResponse) {
+		const response = await axiosWithAuth.post(
+			`${this.BASE_URL}/bulk_create`,
+			course
+		)
+		return response.data
+	}
+	async exampleExcel() {
+		const response = await axiosWithAuth.get(`${this.BASE_URL}/example_excel`)
 		return response.data
 	}
 }

@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import { useDrag, useDrop } from 'react-dnd'
+import { toast } from 'sonner'
 
 import deleteIcon from '../../../../../public/delete.svg'
 
@@ -34,7 +35,19 @@ const SemesterCoursesTable: React.FC<SemesterCoursesTableProps> = ({
 }) => {
 	const [, drop] = useDrop({
 		accept: 'COURSE',
-		drop: (item: CourseEntry) => onDrop(item, semester)
+		drop: (item: CourseEntry) => {
+			const totalEcts = courses.reduce(
+				(sum, current) => sum + parseInt(current.ects),
+				0
+			)
+			if (totalEcts + parseInt(item.ects) > 40) {
+				toast.error(
+					'Total ECTS for this semester exceeds 40. Cannot add more courses.'
+				)
+				return
+			}
+			onDrop(item, semester)
+		}
 	})
 
 	return (

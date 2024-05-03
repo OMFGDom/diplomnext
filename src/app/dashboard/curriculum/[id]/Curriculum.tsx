@@ -58,12 +58,6 @@ export function Curriculum({ onEditToggle }: ICurriculumProps) {
 		setLocalData(prevData => {
 			if (!prevData) return prevData
 
-			const totalCourses = prevData.courses.length
-			if (totalCourses >= 40) {
-				toast.error('Maximum number of courses exceeded. The limit is 40.')
-				return prevData
-			}
-
 			const courseExistsInCurriculum = prevData.courses.some(
 				curriculumCourse => curriculumCourse.course.id === droppedCourse.id
 			)

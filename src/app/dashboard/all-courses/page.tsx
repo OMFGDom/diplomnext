@@ -3,6 +3,7 @@ import { Heading } from '@/components/ui/Heading'
 import { NO_INDEX_PAGE } from '@/constants/seo.constants'
 
 import AllCourseTable from './AllCourseTable'
+import SeeExample from './SeeExample'
 import UploadExcel from './UploadExcel'
 
 export const metadata = {
@@ -18,8 +19,9 @@ export default function DashboardPage() {
 				<div className='flex flex-col w-3/5 mr-auto'>
 					<AllCourseTable />
 				</div>
-				<div className='flex flex-col'>
+				<div className='flex flex-col gap-4'>
 					<UploadExcel />
+					<SeeExample />
 				</div>
 			</div>
 		</>

@@ -12,7 +12,7 @@ export const getAccessToken = () => {
 
 export const saveTokenStorage = (accessToken: string) => {
   Cookies.set(EnumTokens.ACCESS_TOKEN, accessToken, {
-    domain: 'localhost',
+    domain: 'curriculum-crafter.me',
     sameSite: 'strict',
     expires: 1
   })
@@ -25,7 +25,7 @@ export const getRefreshToken = () => {
 
 export const saveRefreshToken = (refreshToken: string) => {
   Cookies.set(EnumTokens.REFRESH_TOKEN, refreshToken, {
-    domain: 'localhost',
+    domain: 'curriculum-crafter.me',
     sameSite: 'strict',
     expires: 3
   })

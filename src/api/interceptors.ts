@@ -8,7 +8,7 @@ import {
 import { authService } from '@/services/auth.service'
 
 const options: CreateAxiosDefaults = {
-  baseURL: "http://49.13.154.79/api",
+  baseURL: "https://api.curriculum-crafter.me/api",
   headers: {
     "Content-Type": "application/json"
   }
